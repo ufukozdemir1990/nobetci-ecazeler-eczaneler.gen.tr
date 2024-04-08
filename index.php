@@ -69,8 +69,14 @@ $pharmaciesData = $pharmacy->getPharmacies();
                     </tbody>
                 </table>
             </div>
+            <div class="bg-secondary card-header py-3 text-white">
+                <h6 class="mb-0 text-center">
+                    <?php if ($pharmaciesData['status'] == 'success')
+                        echo $pharmaciesData['data']['totalPharmacy'] ?>
+                    </h6>
+                </div>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 
-</html>
+    </html>

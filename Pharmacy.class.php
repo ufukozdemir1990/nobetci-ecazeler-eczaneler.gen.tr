@@ -55,6 +55,7 @@ class Pharmacy
             preg_match_all('@<span class="isim">(.*?)</span>@si', $currentData[1][1] ?? '', $name);
             preg_match_all("@<div class='col-lg-6'>(.*?)<@si", $currentData[1][1] ?? '', $address);
             preg_match_all("@<div class='col-lg-3 py-lg-2'>(.*?)</div>@si", $currentData[1][1] ?? '', $phone);
+            preg_match_all('@<div class="mt-4 text-center">(.*?)<br>@si', $curlData ?? '', $totalPharmacy);
 
             $total = count($name[1]);
             if ($total > 0) {
@@ -64,6 +65,7 @@ class Pharmacy
                     'city' => $this->city,
                     'district' => $this->district,
                     'descriptionDate' => trim(strip_tags($date[1][0] ?? '')),
+                    'totalPharmacy' => trim($totalPharmacy[1][0] ?? ''),
                     'pharmacyList' => []
                 ];
 
