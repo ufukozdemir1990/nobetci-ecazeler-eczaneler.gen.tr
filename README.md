@@ -1,0 +1,1 @@
+# nobetci-ecazeler-eczaneler.gen.tr
