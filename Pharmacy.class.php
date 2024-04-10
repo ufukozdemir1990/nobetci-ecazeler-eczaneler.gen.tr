@@ -74,7 +74,7 @@ class Pharmacy
                     $this->jsonData['pharmacyList'][] = [
                         'name' => $pharmacyName,
                         'address' => trim(strip_tags(html_entity_decode($this->ucwordsTR($address[1][$i] ?? '')))),
-                        'phone' => trim(strip_tags(html_entity_decode(str_replace('-', ' ', $phone[1][$i] ?? '')))),
+                        'phone' => trim(strip_tags(html_entity_decode($this->formatPhoneNumber($phone[1][$i] ?? '')))),
                         'maps' => $pharmacyName ? 'https://maps.google.com/maps?q=' . urlencode($pharmacyName) : ''
                     ];
                 }
@@ -213,7 +213,13 @@ class Pharmacy
             $resultString = str_replace(' / ', ' - ', $resultString);
         }
 
-        return $this->abbreviateAddressTerms($resultString);
+        $resultString = $this->abbreviateAddressTerms($resultString);
+
+        $resultString = preg_replace_callback('/(\d\/\d-\w)/u', function($matches) {
+            return mb_strtoupper($matches[0], 'UTF-8');
+        }, $resultString);
+
+        return $resultString;
     }
 
     /**
@@ -280,6 +286,22 @@ class Pharmacy
         }
 
         return $string;
+    }
+
+    /**
+     * Format Phone Number
+     * @param $input
+     * @return string
+     */
+    private function formatPhoneNumber($input) {
+        $pattern = '/0 \(\d{3}\) \d{3}-\d{2}-\d{2}/';
+        preg_match_all($pattern, $input, $matches);
+        $number = $matches[0][0] ?? '';
+
+        if (!empty($number)) {
+            $number = str_replace('-', ' ', $number);
+        }
+        return $number;
     }
 
     /**
